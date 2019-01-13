@@ -11,9 +11,10 @@ LOGGER = logging.getLogger(__name__)
 class Environment(object):
     TWO_WEEKS = 1209600
 
-    def __init__(self, queue_name, bucket_name, function_name, cron_schedule='rate(1 day)'):
+    def __init__(self, queue_name, bucket_name, directory_name, function_name, cron_schedule='rate(1 day)'):
         self._queue_name = queue_name
         self._bucket_name = bucket_name
+        self._directory_name = directory_name
         self._function_name = function_name
         self._cron_schedule = cron_schedule,
         self._s3 = boto.resource('s3')
@@ -95,7 +96,8 @@ class Environment(object):
     def update_function(self, role_arn, filepath, memory_size=128, timeout=300, schedule=None):
         env_variables = {
             'QUEUE_NAME': self._queue_name,
-            'BUCKET_NAME': self._bucket_name
+            'BUCKET_NAME': self._bucket_name,
+            'DIRECTORY_NAME': self._directory_name
         }
         self._delete_function_if_exists(function_name=self._function_name)
 

@@ -19,6 +19,7 @@ def handler(event, context):
 
     q_name = os.environ['QUEUE_NAME']
     b_name = os.environ['BUCKET_NAME']
+    d_name = os.environ['DIRECTORY_NAME']
     temp_filepath = os.environ.get('TEMP_FILE_PATH', '/tmp/logs.txt')
 
     LOGGER.info('Storing messages from queue {} to bucket {}'.format(q_name, b_name))
@@ -27,7 +28,10 @@ def handler(event, context):
     b = s3.Bucket(b_name)
     msgs = read_queue(q)
     written = dump_messages_to_file(msgs, temp_filepath)
-    b.upload_file(temp_filepath, '{}.txt'.format(datetime.datetime.now()))
+    if d_name == ''
+        b.upload_file(temp_filepath, '{}.txt'.format(datetime.datetime.now()))
+    else:
+        b.upload_file(temp_filepath, '{}/{}.txt'.format(d_name, datetime.datetime.now()))
 
     failed_deletions = batch_delete_messages(q, written)
     if failed_deletions:

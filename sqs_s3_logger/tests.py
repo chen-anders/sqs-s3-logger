@@ -83,6 +83,7 @@ class LambdaFunctionTest(TestCase, EnvironmentMixin):
         os.environ.update({
             'QUEUE_NAME': self.environment._queue_name,
             'BUCKET_NAME': self.environment._bucket_name,
+            'DIRECTORY_NAME': self.environment._directory_name,
             'TEMP_FILE_PATH': temp_filepath
         })
         handler(None, None)

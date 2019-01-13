@@ -7,10 +7,11 @@ from sqs_s3_logger.lambda_function_builder import build_package, ROLE_NAME, ROLE
 
 def get_environment(args):
     f_name = args.function if args.function is not None else\
-        '{}-to-{}'.format(args.queue, args.bucket)
+        '{}-to-{}-{}'.format(args.queue, args.bucket, args.directory.replace("/", "-"))
     return Environment(
         queue_name=args.queue,
         bucket_name=args.bucket,
+        directory_name=args.directory,
         function_name=f_name
     )
 
@@ -33,6 +34,8 @@ def main():
                         help='create(default) / purge'),
     parser.add_argument('-b', '--bucket', required=True,
                         help='Name of the bucket to drop logs to')
+    parser.add_argument('-d', '--directory', default='',
+                        help='Name of the directory within the bucket to drop logs to')
     parser.add_argument('-q', '--queue',  required=True,
                         help='Name of the queue to be used')
     parser.add_argument('-f', '--function',
